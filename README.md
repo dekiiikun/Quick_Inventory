@@ -1,6 +1,18 @@
 # quick_inventory
-This PR hardens the quick_inventory script, adds cross‑distro compatibility (RHEL/CentOS/Fedora + Debian/Ubuntu), mirrors output to screen and file, stabilizes formatting, and expands the README with install/usage instructions.
-It also adds a ".gitattributes" to enforce "LF" line endings for shell scripts.
+Automation agent to collect a quick server inventory: OS info, repos, package counts, recent installs, service states, listening ports, disks/FS, network, and common monitoring stack checks.
 
-## License
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+
+## Features
+- Works on RHEL/CentOS/Fedora (dnf/yum) and Debian/Ubuntu (apt/dpkg)
+- Mirrors output to both screen and file (`/var/tmp/inventory_<host>_<ts>.txt`)
+- Stable output (`LANG=C`), safe fallbacks (`|| true`), and bounded sections
+
+
+## Requirements
+- RHEL/CentOS/Fedora: `dnf` (optional: `dnf-plugins-core` for `repoquery`)
+- Debian/Ubuntu: standard `apt/dpkg` (optional: `tasksel`)
+
+
+## Install
+```bash
+sudo install -m 0755 quick_inventory.sh /usr/local/sbin/quick_inventory
