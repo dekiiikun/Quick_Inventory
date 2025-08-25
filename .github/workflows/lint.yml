@@ -12,7 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # pin ke rilis stabil
       - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@2.0.0
         with:
@@ -20,12 +19,10 @@ jobs:
           check_together: 'yes'
           scandir: './'
 
-      # opsional: formatter
       - name: Setup shfmt
         uses: mfinelli/setup-shfmt@v4
-
       - name: Run shfmt (diff only)
-        continue-on-error: true 
-          run: |
+        continue-on-error: true
+        run: |
           shfmt -d -i 2 -bn -ci . | tee /dev/stderr || true
           echo "::notice::shfmt found diffs (advisory). To auto-fix locally: shfmt -w -i 2 -bn -ci ."
