@@ -7,8 +7,10 @@ After=network-online.target
 [Service]
 Type=oneshot
 Environment=LANG=C
-# pastikan folder log ada dulu (kompatibel di semua distro)
-ExecStartPre=/usr/bin/mkdir -p /var/log/quick_inventory
+# ── keamanan: file hasil tidak world-readable
+UMask=0027
+# ── bikin folder log dg permission ketat
+ExecStartPre=/usr/bin/install -d -m 0750 -o root -g root /var/log/quick_inventory
 ExecStart=/usr/local/sbin/quick_inventory --json --days 20 --sections system,services,security,ports --out /var/log/quick_inventory/%H-%Y%m%dT%H%M%S.json
 User=root
 Group=root
