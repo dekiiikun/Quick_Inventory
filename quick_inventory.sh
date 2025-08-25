@@ -200,7 +200,7 @@ section_containers() {
     echo "- docker ps:"
     tmo 5s docker ps --format 'table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}' || true
   fi
-  if command -v podman >/div/null 2>&1; then
+  if command -v podman >/dev/null 2>&1; then
     echo "- podman ps:"
     tmo 5s podman ps --format 'table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}' || true
   fi
