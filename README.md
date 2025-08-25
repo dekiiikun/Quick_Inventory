@@ -5,6 +5,8 @@ Automation agent to collect a quick server inventory: OS info, repos, package co
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 ![Shell](https://img.shields.io/badge/language-shell-lightgrey)
 ![Lint](https://github.com/dekiiikun/Quick_Inventory/actions/workflows/lint.yml/badge.svg)
+![Release](https://img.shields.io/github/v/release/dekiiikun/Quick_Inventory?sort=semver)
+
 
 > Full docs: [Summary.md](./Summary.md)
 
@@ -23,6 +25,7 @@ Automation agent to collect a quick server inventory: OS info, repos, package co
 * [Troubleshooting](#troubleshooting)
 * [Uninstall](#uninstall)
 * [License](#license)
+* [Changelog](#changelog)
 * [Contributing](#contributing)
 * [Summary (full docs)](./Summary.md)
 
@@ -217,6 +220,9 @@ sudo make uninstall
 ## License
 
 MIT — see [LICENSE](./LICENSE).
+
+## Changelog
+Lihat riwayat perubahan di [CHANGELOG.md](./CHANGELOG.md).
 
 ## Contributing
 
