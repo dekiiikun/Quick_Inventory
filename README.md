@@ -15,6 +15,15 @@ Automation agent to collect a quick server inventory: OS info, repos, package co
 ![Arch](https://img.shields.io/badge/pacman-Arch-1793D1?logo=archlinux&logoColor=white)
 ![Alpine](https://img.shields.io/badge/apk-Alpine-0D597F?logo=alpinelinux&logoColor=white)
 
+### Supported / Tested
+| Distro family | Package manager | Status |
+|---|---|---|
+| Debian / Ubuntu | `apt` / `dpkg` | ✅ Tested |
+| RHEL / CentOS / Fedora | `dnf` / `yum` | ✅ Tested |
+| openSUSE | `zypper` | 🟡 Minimal |
+| Arch Linux | `pacman` | 🟡 Minimal |
+| Alpine | `apk` | 🟡 Minimal |
+
 
 > Full docs: [Summary.md](./Summary.md)
 
