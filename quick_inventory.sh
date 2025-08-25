@@ -10,7 +10,7 @@
 set -Eeuo pipefail
 LANG=C
 
-VERSION="0.3.0"
+VERSION="0.1.3"
 
 JSON=0; OUT=""; DAYS=20; SECTIONS="all"; REDACT=0
 
