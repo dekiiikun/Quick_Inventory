@@ -1,10 +1,14 @@
 [Unit]
 Description=Quick Inventory (daily JSON snapshot)
 Documentation=https://github.com/dekiiikun/Quick_Inventory
+Wants=network-online.target
 After=network-online.target
 
 [Service]
 Type=oneshot
 Environment=LANG=C
+# pastikan folder log ada dulu (kompatibel di semua distro)
+ExecStartPre=/usr/bin/mkdir -p /var/log/quick_inventory
 ExecStart=/usr/local/sbin/quick_inventory --json --days 20 --sections system,services,security,ports --out /var/log/quick_inventory/%H-%Y%m%dT%H%M%S.json
 User=root
+Group=root
