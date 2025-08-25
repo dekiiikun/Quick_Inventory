@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2025 Dekiiikun
-# Licensed under the MIT License. See the LICENSE file for details.
 # quick_inventory - fast, safe server inventory
 # Features:
 #  - Sections: system,repos,pkgs,services,ports,fs,net,containers,monitoring,security
@@ -63,13 +62,28 @@ tmo() { # timeout wrapper: tmo 5s cmd...
   if command -v timeout >/dev/null 2>&1; then
     timeout "$@"
   else
-    # tanpa timeout: jalankan apa adanya
     shift
     "$@"
   fi
 }
 
 line() { printf '\n===== %s =====\n' "$1"; }
+
+# ---- validator sections (NEW) ----
+VALID_SECTIONS="system repos pkgs services ports fs net containers monitoring security all"
+validate_sections() {
+  local bad=() s
+  IFS=',' read -r -a _arr <<< "${SECTIONS:-all}"
+  for s in "${_arr[@]}"; do
+    [[ -z "$s" ]] && continue
+    [[ " $VALID_SECTIONS " == *" $s "* ]] || bad+=("$s")
+  done
+  if ((${#bad[@]})); then
+    echo "ERROR: unknown section(s): ${bad[*]}" >&2
+    echo "Valid sections: ${VALID_SECTIONS// /, }" >&2
+    exit 2
+  fi
+}
 
 # ---- info dasar ----
 HOST="$(hostname || echo unknown)"
@@ -121,7 +135,6 @@ section_pkgs() {
       PKG_TOTAL=$(dpkg -l 2>/dev/null | awk '/^ii/{n++} END{print n+0}')
       echo "Total (dpkg -l ^ii): $PKG_TOTAL"
       echo "RECENTLY INSTALLED (last $DAYS days):"
-      # dpkg log format: install timestamps
       if [[ -f /var/log/dpkg.log ]]; then
         awk -v d="$DAYS" -v FS=' ' '
           BEGIN{cmd="date +%s"; cmd | getline now; close(cmd)}
@@ -136,7 +149,6 @@ section_pkgs() {
       echo "Total (rpm -qa): $PKG_TOTAL"
       echo "RECENTLY INSTALLED (last $DAYS days):"
       if command -v rpm >/dev/null 2>&1; then
-        # Ambil 50 paket terakhir (ringkas)
         rpm -qa --last 2>/dev/null | head -n 50 | sed 's/^/  /'
       fi
       ;;
@@ -220,13 +232,11 @@ section_security() {
   line "SECURITY"
   case "$_pkgmgr" in
     apt)
-      # hitung security updates
       SEC_UPD=$(apt list --upgradable 2>/dev/null | grep -i security | wc -l | awk '{print $1+0}')
       echo "Security updates available: $SEC_UPD"
       [[ -f /var/run/reboot-required ]] && { echo "REBOOT REQUIRED: yes"; REBOOT_NEEDED=1; } || echo "REBOOT REQUIRED: no"
       ;;
     dnf)
-      # dnf updateinfo --security list updates
       if command -v dnf >/dev/null 2>&1; then
         S=$(dnf -q updateinfo --security list updates 2>/dev/null | grep -c ' \S')
         SEC_UPD=$(( S + 0 ))
@@ -260,36 +270,29 @@ section_security() {
 emit_json() {
   local jhost="$HOST"
   if (( REDACT )); then
-    # hash pendek untuk hostname
     jhost="host-$(printf %s "$HOST" | sha256sum | cut -c1-8)"
   fi
 
-  # package total
   case "$_pkgmgr" in
-    apt)   PKG_TOTAL=$(dpkg -l 2>/dev/null | awk '/^ii/{n++} END{print n+0}');;
-    dnf|yum) PKG_TOTAL=$(rpm -qa 2>/dev/null | wc -l | awk '{print $1+0}');;
-    *)     PKG_TOTAL=0;;
+    apt)   PKG_TOTAL=$(dpkg -l 2>/dev/null | awk '/^ii/{n++} END{print n+0}') ;;
+    dnf|yum) PKG_TOTAL=$(rpm -qa 2>/dev/null | wc -l | awk '{print $1+0}') ;;
+    *)     PKG_TOTAL=0 ;;
   esac
 
-  # failed services count
   if command -v systemctl >/dev/null 2>&1; then
     FAILED_SVC=$(systemctl --failed --no-legend --type=service 2>/dev/null | wc -l | awk '{print $1+0}')
   fi
 
-  # listening count
   if command -v ss >/dev/null 2>&1; then
     LISTEN_CNT=$(ss -lntuH 2>/dev/null | wc -l | awk '{print $1+0}')
   elif command -v netstat >/dev/null 2>&1; then
     LISTEN_CNT=$(netstat -lntu 2>/dev/null | tail -n +3 | wc -l | awk '{print $1+0}')
   fi
 
-  # security updates + reboot-needed sudah diisi saat section_security() dipanggil;
-  # panggil minimal sekali di JSON mode
   if (( SEC_UPD == 0 && REBOOT_NEEDED == 0 )); then
     section_security >/dev/null || true
   fi
 
-  # keluarkan JSON
   if command -v jq >/dev/null 2>&1; then
     jq -n \
       --arg host "$jhost" \
@@ -314,8 +317,15 @@ emit_json() {
 
 # ---- main ----
 main() {
+  # warning: sebagian fitur butuh root
+  if [[ ${EUID:-$(id -u)} -ne 0 ]]; then
+    echo "WARNING: jalankan sebagai root/sudo untuk hasil lengkap (services/ports/repos)." >&2
+  fi
+
+  # validasi sections
+  validate_sections
+
   if (( JSON == 1 )); then
-    # JSON mode: ringkasan saja
     if [[ -n "$OUT" ]]; then
       mkdir -p "$(dirname "$OUT")"
       emit_json >"$OUT"
