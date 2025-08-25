@@ -8,6 +8,7 @@ Automation agent to collect a quick server inventory: OS info, repos, package co
 ![Test](https://github.com/dekiiikun/Quick_Inventory/actions/workflows/test.yml/badge.svg)
 ![Release](https://img.shields.io/github/v/release/dekiiikun/Quick_Inventory?sort=semver)
 ![Release](https://img.shields.io/github/v/tag/dekiiikun/Quick_Inventory?sort=semver)
+![Platforms](https://img.shields.io/badge/platforms-Debian%2FUbuntu%20%7C%20RHEL%2FCentOS%2FFedora%20%7C%20openSUSE%20%7C%20Arch%20%7C%20Alpine-success)
 
 > Full docs: [Summary.md](./Summary.md)
 
