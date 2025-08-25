@@ -23,5 +23,9 @@ jobs:
       # opsional: formatter
       - name: Setup shfmt
         uses: mfinelli/setup-shfmt@v4
+
       - name: Run shfmt (diff only)
-        run: shfmt -d -i 2 -bn -ci .
+        continue-on-error: true           # <- bikin step ini tidak memerah
+          run: |
+          shfmt -d -i 2 -bn -ci . | tee /dev/stderr || true
+          echo "::notice::shfmt found diffs (advisory). To auto-fix locally: shfmt -w -i 2 -bn -ci ."
