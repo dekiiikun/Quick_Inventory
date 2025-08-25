@@ -5,6 +5,7 @@ Automation agent to collect a quick server inventory: OS info, repos, package co
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 ![Shell](https://img.shields.io/badge/language-shell-lightgrey)
 ![Lint](https://github.com/dekiiikun/Quick_Inventory/actions/workflows/lint.yml/badge.svg)
+![Test](https://github.com/dekiiikun/Quick_Inventory/actions/workflows/test.yml/badge.svg)
 ![Release](https://img.shields.io/github/v/release/dekiiikun/Quick_Inventory?sort=semver)
 ![Release](https://img.shields.io/github/v/tag/dekiiikun/Quick_Inventory?sort=semver)
 
