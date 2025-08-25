@@ -1,0 +1,18 @@
+name: Lint
+on:
+  push:
+  pull_request:
+
+jobs:
+  shell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: ShellCheck
+        uses: ludeeus/action-shellcheck@v2
+        with:
+          check_together: 'yes'
+      - name: Install shfmt
+        run: sudo apt-get update && sudo apt-get install -y shfmt
+      - name: shfmt (diff only)
+        run: shfmt -d -i 2 -bn -ci .
