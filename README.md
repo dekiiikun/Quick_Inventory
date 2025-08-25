@@ -8,7 +8,13 @@ Automation agent to collect a quick server inventory: OS info, repos, package co
 ![Test](https://github.com/dekiiikun/Quick_Inventory/actions/workflows/test.yml/badge.svg)
 ![Release](https://img.shields.io/github/v/release/dekiiikun/Quick_Inventory?sort=semver)
 ![Release](https://img.shields.io/github/v/tag/dekiiikun/Quick_Inventory?sort=semver)
-![Platforms](https://img.shields.io/badge/platforms-Debian%2FUbuntu%20%7C%20RHEL%2FCentOS%2FFedora%20%7C%20openSUSE%20%7C%20Arch%20%7C%20Alpine-success)
+![Linux](https://img.shields.io/badge/OS-Linux-informational?logo=linux)
+![Debian/Ubuntu](https://img.shields.io/badge/apt%2Fdpkg-Debian%2FUbuntu-A81D33?logo=debian&logoColor=white)
+![RHEL/CentOS/Fedora](https://img.shields.io/badge/dnf%2Fyum-RHEL%2FCentOS%2FFedora-EE0000?logo=redhat&logoColor=white)
+![openSUSE](https://img.shields.io/badge/zypper-openSUSE-73BA25?logo=opensuse&logoColor=white)
+![Arch](https://img.shields.io/badge/pacman-Arch-1793D1?logo=archlinux&logoColor=white)
+![Alpine](https://img.shields.io/badge/apk-Alpine-0D597F?logo=alpinelinux&logoColor=white)
+
 
 > Full docs: [Summary.md](./Summary.md)
 
