@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Quick Inventory daily
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+RandomizedDelaySec=2m
+
+[Install]
+WantedBy=timers.target
