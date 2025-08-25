@@ -8,8 +8,6 @@ Automation agent to collect a quick server inventory: OS info, repos, package co
 ![Release](https://img.shields.io/github/v/release/dekiiikun/Quick_Inventory?sort=semver)
 ![Release](https://img.shields.io/github/v/tag/dekiiikun/Quick_Inventory?sort=semver)
 
-
-
 > Full docs: [Summary.md](./Summary.md)
 
 ---
@@ -129,6 +127,15 @@ journalctl -u quick-inventory.service --since today
 
 > Service akan menulis snapshot JSON ke `/var/log/quick_inventory/` dengan pola nama: `%H-%Y%m%dT%H%M%S.json`.
 
+> **Security defaults**
+> Unit systemd memakai `UMask=0027` dan membuat folder log
+> `/var/log/quick_inventory` dengan permission `0750` (root + group).
+> Artinya file JSON akan dibuat dengan mode efektif `0640` (tidak world-readable).
+> Jika tim lain perlu membaca log:
+>
+> * tambahkan user ke group yang sama dengan service (`Group=` pada unit), atau
+> * ubah `Group=` dan/atau mode di unit sesuai kebijakan (lihat `contrib/systemd/quick-inventory.service`), lalu `systemctl daemon-reload`.
+
 ## Output
 
 ### Text mode (section yang dicetak)
@@ -197,6 +204,7 @@ shfmt -w -i 2 -bn -ci quick_inventory.sh
 
 ## Notes
 
+* Jalankan dengan **sudo/root** agar bagian services/ports/repos lengkap. Jika tidak, skrip akan menampilkan peringatan dan tetap berjalan dengan data terbatas.
 * End-of-line: repo menyertakan `.gitattributes` untuk memaksa **LF** pada file `.sh`.
 * Jika muncul `bash\r: bad interpreter`, ubah line endings ke LF atau jalankan `dos2unix quick_inventory.sh`.
 * Jika `ss` tidak ada, instal `iproute2` (Debian/Ubuntu) atau gunakan fallback `netstat`.
@@ -204,6 +212,7 @@ shfmt -w -i 2 -bn -ci quick_inventory.sh
 
 ## Troubleshooting
 
+* **`ERROR: unknown section(s)`** → nilai `--sections` tidak valid. Daftar yang valid: `system, repos, pkgs, services, ports, fs, net, containers, monitoring, security, all`.
 * **`bash\r: bad interpreter`** → file masih CRLF. Ubah ke LF atau jalankan `dos2unix quick_inventory.sh`.
 * **`ss: command not found`** → install paket `iproute2` atau gunakan `netstat`.
 * **Bagian layanan kosong** → host tidak memakai `systemd` atau `systemctl` tidak tersedia.
@@ -224,6 +233,7 @@ sudo make uninstall
 MIT — see [LICENSE](./LICENSE).
 
 ## Changelog
+
 Lihat riwayat perubahan di [CHANGELOG.md](./CHANGELOG.md).
 
 ## Contributing
