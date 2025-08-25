@@ -7,16 +7,21 @@ permissions:
   contents: read
 
 jobs:
-  shellcheck:
-    name: ShellCheck
+  ShellCheck:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      # pin ke rilis stabil
       - name: Run ShellCheck
-        uses: ludeeus/action-shellcheck@master
+        uses: ludeeus/action-shellcheck@2.0.0
         with:
-          # Fail hanya untuk level "error", abaikan warning/info/style
-          severity: error    # ref: action README
-          # Cek semua file sekaligus untuk hindari SC1090/SC1091
-          check_together: 'yes'  # ref: action README
+          severity: error
+          check_together: 'yes'
           scandir: './'
+
+      # opsional: formatter
+      - name: Setup shfmt
+        uses: mfinelli/setup-shfmt@v4
+      - name: Run shfmt (diff only)
+        run: shfmt -d -i 2 -bn -ci .
