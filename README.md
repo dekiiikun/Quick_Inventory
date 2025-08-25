@@ -192,3 +192,4 @@ MIT — see [LICENSE](./LICENSE).
 ## Contributing
 
 PR welcome. Gunakan gaya commit **Conventional Commits** (`feat:`, `fix:`, `docs:`). Fitur yang disarankan: penambahan section/plugins, dukungan distro tambahan, atau integrasi output JSON ke pipeline.
+
