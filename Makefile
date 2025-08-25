@@ -1,17 +1,24 @@
-# Simple Makefile for Quick_Inventory
-# Usage examples:
+# Makefile for Quick_Inventory
+# Usage:
+#   sudo make            # tampilkan bantuan
 #   sudo make install
 #   sudo make install-systemd enable-timer
-#   sudo make uninstall-systemd uninstall
+#   sudo make disable-timer uninstall-systemd uninstall
 
-PREFIX ?= /usr/local
-BINDIR ?= $(PREFIX)/sbin
+.DEFAULT_GOAL := help
+SHELL := /bin/sh
+
+PREFIX  ?= /usr/local
+BINDIR  ?= $(PREFIX)/sbin
 UNITDIR ?= /etc/systemd/system
 
 SCRIPT := quick_inventory.sh
 TARGET := quick_inventory
 
-.PHONY: install uninstall install-systemd uninstall-systemd enable-timer disable-timer lint fmt test
+.PHONY: help install uninstall install-systemd uninstall-systemd enable-timer disable-timer lint fmt test
+
+help:
+	@echo "Targets: install | uninstall | install-systemd | uninstall-systemd | enable-timer | disable-timer | lint | fmt | test"
 
 install:
 	install -m 0755 $(SCRIPT) $(BINDIR)/$(TARGET)
@@ -26,7 +33,7 @@ install-systemd:
 	systemctl daemon-reload
 
 uninstall-systemd:
-	-systemctl disable --now quick-inventory.timer
+	- systemctl disable --now quick-inventory.timer
 	rm -f $(UNITDIR)/quick-inventory.service $(UNITDIR)/quick-inventory.timer
 	systemctl daemon-reload
 
@@ -34,7 +41,7 @@ enable-timer:
 	systemctl enable --now quick-inventory.timer
 
 disable-timer:
-	systemctl disable --now quick-inventory.timer
+	- systemctl disable --now quick-inventory.timer
 
 lint:
 	@command -v shellcheck >/dev/null 2>&1 && shellcheck -x $(SCRIPT) || echo "shellcheck not installed; skipping"
