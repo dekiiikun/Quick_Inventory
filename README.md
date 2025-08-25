@@ -15,6 +15,10 @@ Automation agent to collect a quick server inventory: OS info, repos, package co
 ![Arch](https://img.shields.io/badge/pacman-Arch-1793D1?logo=archlinux&logoColor=white)
 ![Alpine](https://img.shields.io/badge/apk-Alpine-0D597F?logo=alpinelinux&logoColor=white)
 
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/8edf5d25-3962-4152-b60b-e5a598cb1184" />
+
+
+
 ### Supported / Tested
 | Distro family | Package manager | Status |
 |---|---|---|
