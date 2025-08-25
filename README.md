@@ -142,9 +142,38 @@ journalctl -u quick-inventory.service --since today
 * **MONITORING STACK CHECK** — prom/grafana/node\_exporter
 * **SECURITY** — security updates & reboot-required
 
+### Example output (text)
+
+```
+===== SYSTEM =====
+Host: web-01
+OS  : Ubuntu 22.04.5 LTS
+Kernel: 6.8.0-40-generic
+Uptime(s): 123456
+
+===== SERVICES (systemd) =====
+- RUNNING:
+  ssh.service
+  cron.service
+- ENABLED:
+  ssh.service
+- FAILED:
+  (none)
+
+===== LISTENING PORTS =====
+Netid State  Local Address:Port  Peer Address:Port  Process
+tcp   LISTEN 0.0.0.0:22          0.0.0.0:*        users:(("sshd",pid=123,fd=3))
+```
+
 ### JSON fields
 
 `host`, `os`, `kernel`, `pkgmgr`, `packages_total`, `services_failed`, `ports_listening`, `security_updates`, `reboot_required`, `since_days`.
+
+### Example output (JSON)
+
+```json
+{"host":"host-1a2b3c4d","os":"Ubuntu 22.04.5 LTS","kernel":"6.8.0-40-generic","pkgmgr":"apt","packages_total":412,"services_failed":0,"ports_listening":7,"security_updates":2,"reboot_required":false,"since_days":20}
+```
 
 ## CI / Lint & Format
 
@@ -192,4 +221,3 @@ MIT — see [LICENSE](./LICENSE).
 ## Contributing
 
 PR welcome. Gunakan gaya commit **Conventional Commits** (`feat:`, `fix:`, `docs:`). Fitur yang disarankan: penambahan section/plugins, dukungan distro tambahan, atau integrasi output JSON ke pipeline.
-
