@@ -1,0 +1,31 @@
+name: Test
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ensure executable
+        run: chmod +x quick_inventory.sh
+
+      - name: Install jq
+        run: sudo apt-get update -y && sudo apt-get install -y jq
+
+      - name: Run quick_inventory (JSON)
+        run: |
+          sudo ./quick_inventory.sh --json --days 1 > out.json
+          jq -e 'has("host") and has("os") and has("packages_total") and has("security_updates") and has("since_days")' out.json >/dev/null
+
+      - name: Validate sections flag (should fail with exit 2)
+        run: |
+          set +e
+          ./quick_inventory.sh --json --sections notexist >/dev/null 2>&1
+          test $? -eq 2
